@@ -76,11 +76,11 @@ printf("Hello world");
 ###### Примеры использования
 ```sh
 for (int i = 0; i < 15; i++) {
-    printf("Roma pidr");
+    printf("Hello world!");
 }
 
 while (false) {
-    printf("Fedya pidr");
+    printf("Hello world!");
 }
 ```
 
