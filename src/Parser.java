@@ -9,9 +9,21 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public void lang() throws LangParseEsception {
-        while(tokens.size() > counter) {
-            expr();
+    public boolean lang() throws LangParseEsception {
+
+        try {
+            while(tokens.size() > counter) {
+                expr();
+            }
+
+            System.out.println("######## ВСЕ ПРОШЛО УСПЕШНО ########");
+            return true;
+        } catch (LangParseEsception e) {
+            System.out.println("######## Код не прошел проверку ########");
+            System.out.println(e);
+            System.out.println(tokens.size());
+            System.out.println(counter);
+            return false;
         }
     }
 
@@ -39,6 +51,26 @@ public class Parser {
         value();
         ROUND_CLOSE_BRACKET();
         SEMICOLON();
+    }
+
+    private void functionCreation () throws LangParseEsception {
+        KEY_DATA_TYPE();
+        VAR();
+        ROUND_OPEN_BRACKET();
+
+        int step2 = counter;
+        try {
+            while (!(tokens.get(counter).getType().equals(LexemType.ROUND_CLOSE_BRACKET))){
+                KEY_DATA_TYPE();
+                variableValue();
+                // проеврка на создание параметров
+            }
+
+            ROUND_CLOSE_BRACKET();
+        } catch (LangParseEsception e) {
+            counter = step2;
+            ROUND_CLOSE_BRACKET();
+        }
     }
 
     private void forLoop () throws LangParseEsception {
@@ -104,6 +136,17 @@ public class Parser {
     private  void value_expr () throws LangParseEsception {
         int step = counter;
 
+//        try {
+//            variableCreation();
+//            variableAssigment();
+//            ifCondition();
+//            forLoop();
+//            printF();
+//        } catch (LangParseEsception e) {
+//            counter = step;
+//            throw e;
+//        }
+
         try {
             variableCreation();
         } catch (LangParseEsception e) {
@@ -120,11 +163,7 @@ public class Parser {
                         forLoop();
                     } catch (LangParseEsception e4){
                         counter = step;
-                        try {
-                            printF();
-                        } catch (LangParseEsception e5){
-                            System.out.println(e5);
-                        }
+                        printF();
                     }
                 }
             }
@@ -169,7 +208,7 @@ public class Parser {
 
     private void matchToken(Token token, LexemType type) throws LangParseEsception {
         if (!token.getType().equals(type)) {
-            throw new LangParseEsception("FATAL ERROR: " + type
+            throw new LangParseEsception("ERROR: " + token.getType()
                     + " expected but "
                     + token.getType().name() + ": '" + token.getValue()
                     + "' found");

@@ -47,7 +47,10 @@ public class LangUI {
             System.out.println("");
 
             Parser parser = new Parser( lexer.tokens() );
-            parser.lang();
+            if (parser.lang()) {
+                ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.tokens());
+                rpNotation.translate();
+            }
 
         }
         catch(IOException | LangParseEsception ex){
