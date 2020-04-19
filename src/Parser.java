@@ -1,12 +1,16 @@
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import java.util.List;
 
 public class Parser {
 
     private final List<Token> tokens;
     private int counter = 0;
+    private VariablesTable vTable;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
+        vTable = new VariablesTable();
     }
 
     public boolean lang() throws LangParseEsception {
@@ -149,6 +153,12 @@ public class Parser {
 
         try {
             variableCreation();
+
+            System.out.println("trying to create: " + tokens.get(step).getValue() +  " " + tokens.get(step+1).getValue());
+            boolean create = vTable.addVariable(new VariablesTable.tVariable(tokens.get(step).getValue(), tokens.get(step+1).getValue()));
+
+            System.out.println("Variable creationg: " + create);
+            System.out.println("");
         } catch (LangParseEsception e) {
             counter = step;
             try {
