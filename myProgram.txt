@@ -1,2 +1,3 @@
 int aifk = 12;
-int aifk = 12;
+
+bool aifk = 15;

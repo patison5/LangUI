@@ -157,12 +157,22 @@ public class Parser {
             System.out.println("trying to create: " + tokens.get(step).getValue() +  " " + tokens.get(step+1).getValue());
             boolean create = vTable.addVariable(new VariablesTable.tVariable(tokens.get(step).getValue(), tokens.get(step+1).getValue()));
 
-            System.out.println("Variable creationg: " + create);
-            System.out.println("");
+            if (!create) {
+                System.out.println("VARIABLE ALREADY EXISTS!");
+                throw new LangParseEsception("VARIABLE ALREADY EXISTS!");
+            }
         } catch (LangParseEsception e) {
             counter = step;
             try {
                 variableAssigment();
+
+                boolean assign = vTable.checkIfValueExist(new VariablesTable.tVariable(tokens.get(step).getValue()));
+
+                if (!assign) {
+                    System.out.println("VARIABLE doesn't EXISTS!");
+                    throw new LangParseEsception("VARIABLE doesn't EXISTS!");
+                }
+
             } catch (LangParseEsception e2) {
                 counter = step;
                 try {
