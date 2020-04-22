@@ -8,54 +8,94 @@ public class ReversePolisNotation {
     public List<Token> variables = new ArrayList<>();
     public List<Token> result = new ArrayList<>();
 
+
+    Token IfForValue = null;
+    boolean isIforFunc = false;
+    int ifAndForCounter = 0;
+
+    public List<LexemType> op = new ArrayList<>();
+
+
     Stack<Token> stack = new Stack<>();
 
     public ReversePolisNotation(List<Token> tokens) {
         this.tokens = tokens;
+
+        op.add(LexemType.OP);
+        op.add(LexemType.ROUND_CLOSE_BRACKET);
+        op.add(LexemType.ROUND_OPEN_BRACKET);
+        op.add(LexemType.COMPARISION_OP);
     }
 
     public List<Token> getTokens() {
         return tokens;
     }
 
-    public int priority (Token token) {
+    public int GetPriority (Token token) {
         switch (token.getValue()) {
             case "*":
             case "/":
                 return 4;
 
+            case ">":
+            case "<":
+                return 3;
+
             case "+":
             case "-":
                 return 2;
 
-            default: return 1;
+            default:
+                return 1;
         }
     }
 
     public void translate () {
 
-        for (Token token : tokens)
-        {
+        for (Token token : tokens) {
             if (token.getType().equals(LexemType.SEMICOLON)) {
                 while (stack.size() > 0)
                     result.add(stack.pop());
                 continue;
             }
 
-            if (token.getType().equals(LexemType.OP)) {
+            if (token.getType().equals(LexemType.KEY_IF)) {
+                ifAndForCounter++;
+                IfForValue = token;
+                isIforFunc = true;
+                continue;
+            }
+            if (token.getType().equals(LexemType.FIGURE_OPEN_BRACKET)) {
+                result.add(IfForValue);
+                result.add(token);
+                continue;
+            }
+
+            if (token.getType().equals(LexemType.FIGURE_CLOSE_BRACKET)) {
+                isIforFunc = false;
+                result.add(token);
+                continue;
+            }
+
+
+
+
+            if (op.contains(token.getType())) {
                 if ((stack.size() > 0) && (token.getType() != LexemType.ROUND_OPEN_BRACKET)) {
                     if (token.getType() == LexemType.ROUND_CLOSE_BRACKET) {
                         Token s = stack.pop();
-                        while (s.getType() != LexemType.ROUND_CLOSE_BRACKET) {
+                        while (s.getType() != LexemType.ROUND_OPEN_BRACKET) {
                             result.add(s);
                             s = stack.pop();
                         }
                     }
                     else {
-                        if (priority(token) > priority(stack.peek()))  {
+                        if (GetPriority(token) > GetPriority(stack.peek())) {
                             stack.add(token);
-                        } else {
-                            while (stack.size() > 0 && priority(token) <= priority(stack.peek())) result.add(stack.pop());
+                        }
+                        else {
+                            while (stack.size() > 0 && GetPriority(token) <= GetPriority(stack.peek()))
+                                result.add(stack.pop());
                             stack.add(token);
                         }
                     }
@@ -67,41 +107,11 @@ public class ReversePolisNotation {
                 result.add(token);
         }
         if (stack.size() > 0)
-            for (Token c : stack)
-                result.add(c);
+            for (Token token : stack)
+                result.add(token);
 
 
 
-
-//        $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-
-//        for(Token token : tokens) {
-//
-//            if (token.getType().equals(LexemType.KEY_DATA_TYPE)) {
-//                continue;
-//            }
-//
-//            if (token.getType().equals(LexemType.VAR) || token.getType().equals(LexemType.DIGIT) || token.getType().equals(LexemType.ASSIGN_OP)) {
-//                result.add(token);
-//            }
-//
-//
-//
-//            if (token.getType().equals(LexemType.OP)) {;
-//                if (operands.size()-1 >= 0) {
-//                    if (token.getValue().equals("+") || token.getValue().equals("-")) {
-//                        result.add(operands.get(operands.size()-1));
-//                        operands.remove(operands.get(operands.size()-1));
-//                        operands.add(token);
-//                    } else {
-//                        operands.add(token);
-//                    }
-//                } else {
-//                    operands.add(token);
-//                }
-//            }
-//
-//        }
 
 
         for (Token token : result) {
