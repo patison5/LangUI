@@ -59,7 +59,7 @@ public class ReversePolisNotation {
                 continue;
             }
 
-            if (token.getType().equals(LexemType.KEY_IF)) {
+            if (token.getType().equals(LexemType.KEY_IF) || token.getType().equals(LexemType.KEY_WHILE)) {
                 ifAndForCounter++;
                 IfForValue = token;
                 isIforFunc = true;
@@ -109,9 +109,6 @@ public class ReversePolisNotation {
         if (stack.size() > 0)
             for (Token token : stack)
                 result.add(token);
-
-
-
 
 
         for (Token token : result) {

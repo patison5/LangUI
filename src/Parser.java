@@ -154,7 +154,7 @@ public class Parser {
         try {
             variableCreation();
 
-            System.out.println("trying to create: " + tokens.get(step).getValue() +  " " + tokens.get(step+1).getValue());
+            //System.out.println("trying to create: " + tokens.get(step).getValue() +  " " + tokens.get(step+1).getValue());
             boolean create = vTable.addVariable(new VariablesTable.tVariable(tokens.get(step).getValue(), tokens.get(step+1).getValue()));
 
             if (!create) {

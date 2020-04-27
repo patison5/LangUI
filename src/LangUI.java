@@ -23,20 +23,25 @@ public class LangUI {
             // читаем посимвольно
             int c;
             while((c=reader.read())!=-1){
-                if ((c == 59) || (c == 40) || (c == 41) || (c == 42) || (c == 43) || (c == 45) || (c == 47) || (c == 123) || (c == 125) || (c == 91) || (c == 93) || (c == 60) || (c == 61) || (c == 62))
-                    file = file + " " + (char)c + " ";
-                else
+//                if ((c == 59) || (c == 40) || (c == 41) || (c == 42) || (c == 43) || (c == 45) || (c == 47) || (c == 123) || (c == 125) || (c == 91) || (c == 93) || (c == 60) || (c == 61) || (c == 62))
+//                    file = file + " " + (char)c + " ";
+//                else
                     file = file + (char)c;
             }
 
-            file = file.replaceAll("\n"," ");
+//            file = file.replaceAll("\n"," ");
             //file = file.replaceAll(";","");
 
             //System.out.println("");
             //System.out.println(file);
 
             Lexer lexer = new Lexer(file);
-            List<Token> tokens = lexer.tokens();
+            List<Token> tokens = lexer.getTokens();
+
+            for (Token token : tokens) {
+                //System.out.println("`" + token.getType() + "` ");
+            }
+
             System.out.println("\nAmount of tokens: " + tokens.size());
 
             for (int i = 0; i < tokens.size(); i++) {
@@ -46,9 +51,9 @@ public class LangUI {
             }
             System.out.println("");
 
-            Parser parser = new Parser( lexer.tokens() );
+            Parser parser = new Parser( lexer.getTokens() );
             if (parser.lang()) {
-                ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.tokens());
+                ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
                 rpNotation.translate();
             }
 
