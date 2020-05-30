@@ -8,6 +8,11 @@ public class Token {
         this.value = value;
     }
 
+    public Token(String value) {
+        this.type = null;
+        this.value = value;
+    }
+
     public LexemType getType() {
         return type;
     }

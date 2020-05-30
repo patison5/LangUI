@@ -8,6 +8,8 @@ public class Parser {
     private int counter = 0;
     private VariablesTable vTable;
 
+    boolean openRoundBracketFound = false;
+
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         vTable = new VariablesTable();
@@ -204,15 +206,44 @@ public class Parser {
 
 
     private void variableValue() throws LangParseEsception {
-        value();
+
+        int tmpCount = counter;
+
+        try {
+            value();
+        } catch (LangParseEsception e) {
+            counter = tmpCount;
+            ROUND_OPEN_BRACKET();
+            openRoundBracketFound = true;
+        }
 
         while (tokens.size() > counter) {
             if (tokens.get(counter).getType().equals(LexemType.SEMICOLON))
                 break;
 
-            OP();
-            value();
+            if (openRoundBracketFound) {
+                int tmpCounter = counter;
+                try {
+                    OP();
+                } catch (LangParseEsception e) {
+                    counter = tmpCounter;
+                    ROUND_OPEN_BRACKET();
+                    openRoundBracketFound = true;
+                }
+            } else {
+                int tmpCounter = counter;
+                try {
+                    value();
+                } catch (LangParseEsception e) {
+                    counter = tmpCounter;
+                    ROUND_CLOSE_BRACKET();
+                    openRoundBracketFound = false;
+                }
+            }
+
+
         }
+
     }
 
     private void value() throws LangParseEsception {

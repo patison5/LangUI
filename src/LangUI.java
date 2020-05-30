@@ -5,6 +5,7 @@ import java.util.List;
 
 public class LangUI {
     public static void main(String[] args) {
+        System.out.println();
         String file = "";
         try {
             File myObj = new File("myProgram.txt");
@@ -23,31 +24,21 @@ public class LangUI {
             // читаем посимвольно
             int c;
             while((c=reader.read())!=-1){
-//                if ((c == 59) || (c == 40) || (c == 41) || (c == 42) || (c == 43) || (c == 45) || (c == 47) || (c == 123) || (c == 125) || (c == 91) || (c == 93) || (c == 60) || (c == 61) || (c == 62))
-//                    file = file + " " + (char)c + " ";
-//                else
                     file = file + (char)c;
             }
 
-//            file = file.replaceAll("\n"," ");
-            //file = file.replaceAll(";","");
-
-            //System.out.println("");
-            //System.out.println(file);
+            file = file.replaceAll("\n","");
 
             Lexer lexer = new Lexer(file);
             List<Token> tokens = lexer.getTokens();
-
-            for (Token token : tokens) {
-                //System.out.println("`" + token.getType() + "` ");
-            }
 
             System.out.println("\nAmount of tokens: " + tokens.size());
 
             for (int i = 0; i < tokens.size(); i++) {
                 Token token = tokens.get(i);
-                //System.out.println(token.getType() + " `" + token.getValue() + "`");
-                System.out.print("`" + token.getValue() + "` ");
+                String a = token.getValue();
+                System.out.print("`" +  a + "` ");
+                //System.out.print(" " + token.getValue());
             }
             System.out.println("");
 
@@ -55,6 +46,8 @@ public class LangUI {
             if (parser.lang()) {
                 ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
                 rpNotation.translate();
+
+                System.out.println("\na 1 = a 3 < p1 !F a a 1 + = b a = p2 ! c b 2 + =");
             }
 
         }

@@ -1,8 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ReversePolisNotation {
+    Map<String, Integer> marksPosiions = new HashMap<String, Integer>();
+
     private final List<Token> tokens;
     public List<Token> operands = new ArrayList<>();
     public List<Token> variables = new ArrayList<>();
@@ -10,11 +10,13 @@ public class ReversePolisNotation {
 
 
     Token IfForValue = null;
-    boolean isIforFunc = false;
-    int ifAndForCounter = 0;
+    boolean isWhile = false;
+    boolean isIF    = false;
+
+    int markCunter = 1;
+    int markPositioinCounter = 0;
 
     public List<LexemType> op = new ArrayList<>();
-
 
     Stack<Token> stack = new Stack<>();
 
@@ -25,6 +27,7 @@ public class ReversePolisNotation {
         op.add(LexemType.ROUND_CLOSE_BRACKET);
         op.add(LexemType.ROUND_OPEN_BRACKET);
         op.add(LexemType.COMPARISION_OP);
+        op.add(LexemType.ASSIGN_OP);
     }
 
     public List<Token> getTokens() {
@@ -33,6 +36,9 @@ public class ReversePolisNotation {
 
     public int GetPriority (Token token) {
         switch (token.getValue()) {
+            case "=":
+                return 0;
+
             case "*":
             case "/":
                 return 4;
@@ -53,27 +59,72 @@ public class ReversePolisNotation {
     public void translate () {
 
         for (Token token : tokens) {
+
             if (token.getType().equals(LexemType.SEMICOLON)) {
                 while (stack.size() > 0)
-                    result.add(stack.pop());
+                    addToken(stack.pop());
                 continue;
             }
 
-            if (token.getType().equals(LexemType.KEY_IF) || token.getType().equals(LexemType.KEY_WHILE)) {
-                ifAndForCounter++;
-                IfForValue = token;
-                isIforFunc = true;
+            if (token.getType().equals(LexemType.KEY_WHILE) || token.getType().equals(LexemType.KEY_IF)) {
+                Token m1 = new Token("P" + markCunter);
+                marksPosiions.put("P" + markCunter, markPositioinCounter);
+                markCunter++;
+                IfForValue = m1;
+
+                if (token.getType().equals(LexemType.KEY_WHILE))
+                    isWhile = true;
+
+                if (token.getType().equals(LexemType.KEY_IF))
+                    isIF = true;
+
                 continue;
             }
+
             if (token.getType().equals(LexemType.FIGURE_OPEN_BRACKET)) {
-                result.add(IfForValue);
-                result.add(token);
+
+                if (isWhile || isIF) {
+                    addToken(IfForValue);
+                    Token m2 = new Token("!F");
+                    addToken(m2);
+                }
+
                 continue;
             }
 
             if (token.getType().equals(LexemType.FIGURE_CLOSE_BRACKET)) {
-                isIforFunc = false;
-                result.add(token);
+                if (isWhile) {
+                    Token m1 = new Token("P" + markCunter);
+                    Token m2 = new Token("!");
+
+                    while (stack.size() > 0)
+                        addToken(stack.pop());
+
+                    addToken(m1);
+                    addToken(m2);
+
+                    // обязательно идет после addtoken (счетчик сдвигатся)
+                    marksPosiions.put("P" + markCunter, marksPosiions.get("P" + (markCunter-1)));
+                    marksPosiions.put("P" + (markCunter - 1), markPositioinCounter);
+
+                    markCunter++; // сдвиг счетчика меток
+                    isWhile = false;
+                }
+
+                if (isIF) {
+
+                    while (stack.size() > 0)
+                        addToken(stack.pop());
+
+
+                    // обязательно идет после addtoken (счетчик сдвигатся)
+                    marksPosiions.put("P" + (markCunter - 1), markPositioinCounter);
+
+                    markCunter++; // сдвиг счетчика меток
+                    isIF = false;
+                }
+
+
                 continue;
             }
 
@@ -85,17 +136,15 @@ public class ReversePolisNotation {
                     if (token.getType() == LexemType.ROUND_CLOSE_BRACKET) {
                         Token s = stack.pop();
                         while (s.getType() != LexemType.ROUND_OPEN_BRACKET) {
-                            result.add(s);
+                            addToken(s);
                             s = stack.pop();
                         }
-                    }
-                    else {
+                    } else {
                         if (GetPriority(token) > GetPriority(stack.peek())) {
                             stack.add(token);
-                        }
-                        else {
+                        } else {
                             while (stack.size() > 0 && GetPriority(token) <= GetPriority(stack.peek()))
-                                result.add(stack.pop());
+                                addToken(stack.pop());
                             stack.add(token);
                         }
                     }
@@ -104,12 +153,13 @@ public class ReversePolisNotation {
                     stack.add(token);
             }
             else
-                result.add(token);
+                addToken(token);
         }
         if (stack.size() > 0)
             for (Token token : stack)
-                result.add(token);
+                addToken(token);
 
+        debugMark();
 
         for (Token token : result) {
             System.out.print(token.getValue()+ " ");
@@ -119,8 +169,24 @@ public class ReversePolisNotation {
 
     public  void returnAllOperansToResult() {
         for (Token token : operands) {
-            result.add(token);
+            addToken(token);
             operands.remove(token);
+        }
+    }
+
+    public void addToken (Token token) {
+        result.add(token);
+        System.out.println(token.getValue() + " : " + markPositioinCounter);
+        markPositioinCounter++;
+    }
+
+    private void debugMark() {
+        System.out.println("");
+        System.out.println("-----------");
+        for (Map.Entry entry : marksPosiions.entrySet()) {
+            System.out.println(" " + entry.getKey() + ":    "
+                    + entry.getValue());
+            System.out.println("-----------");
         }
     }
 }
