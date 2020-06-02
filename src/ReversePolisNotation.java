@@ -62,6 +62,10 @@ public class ReversePolisNotation {
     public List<Token> translate () {
         for (Token token : tokens) {
 
+            if (token.getType().equals(LexemType.KEY_DATA_TYPE)) {
+                continue;
+            }
+
             if (token.getType().equals(LexemType.SEMICOLON)) {
                 while (stack.size() > 0)
                     addToken(stack.pop());

@@ -44,20 +44,26 @@ public class StackMachine {
             } else if (token.getType() == LexemType.DIGIT) {
                 buffer.push(token.getValue());
             } else if (token.getType() == LexemType.OP) {
-                System.out.println("##### checking #####");
-                operation(token.getValue());
+                OPERATION(token.getValue());
+            } else if (token.getType() == LexemType.ASSIGN_OP) {
+                ASSIGN_OP();
             }
             counter++;
         }
 
+        debugTable();
         return 0;
     }
 
 
-    private void operation(String op) {
-        System.out.println(buffer.peek());
+    private void ASSIGN_OP(){
         a = getVarFromTable(buffer.pop());
+        varTable.put(buffer.pop(), a);
+    }
+
+    private void OPERATION(String op) {
         b = getVarFromTable(buffer.pop());
+        a = getVarFromTable(buffer.pop());
 
         switch (op) {
             case "+":
@@ -79,16 +85,29 @@ public class StackMachine {
     }
 
     private int getVarFromTable (String value) {
-        return varTable.get(value);
+        if (isDigit(value)) {
+            return Integer.valueOf(value);
+        } else {
+            return varTable.get(value);
+        }
     }
 
+
+    private static boolean isDigit(String s) throws NumberFormatException {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
     private void debugTable() {
         System.out.println("");
         System.out.printf("%-15s%-10s%n", "переменная", "значение");
         for (Map.Entry entry : varTable.entrySet()) {
             // Выводим имя поля
-            System.out.printf("%-11s", entry.getKey());
+            System.out.printf("%-15s", entry.getKey());
             // Выводим значение поля
             System.out.printf("%5s%n", entry.getValue());
         }
