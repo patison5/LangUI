@@ -37,9 +37,8 @@ public class StackMachine {
         while (counter < tokens.size()) {
             token = tokens.get(counter);
 
-//            System.out.println(token.getType());
-
             if (token.getType() == LexemType.VAR) {
+                System.out.println("VAR: " + token.getType() + ", " + token.getValue() + ", " + counter);
                 buffer.push(token.getValue());
             } else if (token.getType() == LexemType.DIGIT) {
                 buffer.push(token.getValue());
@@ -48,8 +47,15 @@ public class StackMachine {
             } else if (token.getType() == LexemType.ASSIGN_OP) {
                 ASSIGN_OP();
             } else if (token.getType() == LexemType.COMPARISION_OP) {
-                System.out.println("LOGIN");
                 LOGIC_OPERATION(token.getValue());
+            } else if (token.getValue() == "!F") {
+                int pointValue = marksPosiions.get(tokens.get(counter-1).getValue());
+                boolean fl = buffer.pop().equals("true");
+                counter = fl ? counter : pointValue;
+            } else if (token.getValue() == "!") {
+                int pointValue = marksPosiions.get(tokens.get(counter-1).getValue());
+                counter = pointValue;
+                counter--; //костыль (почему-то прыгает на один элемент вперед - выяснить!
             }
             counter++;
         }

@@ -1,6 +1,4 @@
-int k = (12 - 2 * 0) * 12;
-int b = 1;
-int c = k + b;
-if (1 > 2) {
-    c = 12;
+int b = 0;
+while (b < 3) {
+    b = b + 1;
 }
