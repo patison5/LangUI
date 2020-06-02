@@ -44,10 +44,16 @@ public class LangUI {
 
             Parser parser = new Parser( lexer.getTokens() );
             if (parser.lang()) {
-                ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
-                rpNotation.translate();
 
-                System.out.println("\na 1 = a 3 < p1 !F a a 1 + = b a = p2 ! c b 2 + =");
+                if (!parser.checkBrackets()) {
+                    System.out.println("ERROR IN BRACKETS!");
+                }
+
+                ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
+                List<Token> tk = rpNotation.translate();
+                StackMachine machine = new StackMachine(tk);
+                machine.run();
+                //System.out.println("\na 1 = a 3 < p1 !F a a 1 + = b a = p2 ! c b 2 + =");
             }
 
         }
