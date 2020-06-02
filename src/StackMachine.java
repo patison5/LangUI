@@ -37,7 +37,7 @@ public class StackMachine {
         while (counter < tokens.size()) {
             token = tokens.get(counter);
 
-            System.out.println(token.getType());
+//            System.out.println(token.getType());
 
             if (token.getType() == LexemType.VAR) {
                 buffer.push(token.getValue());
@@ -47,6 +47,9 @@ public class StackMachine {
                 OPERATION(token.getValue());
             } else if (token.getType() == LexemType.ASSIGN_OP) {
                 ASSIGN_OP();
+            } else if (token.getType() == LexemType.COMPARISION_OP) {
+                System.out.println("LOGIN");
+                LOGIC_OPERATION(token.getValue());
             }
             counter++;
         }
@@ -79,9 +82,38 @@ public class StackMachine {
                 c = a * b;
                 break;
         }
-
         System.out.println("OPERATION: " + String.valueOf(c));
         buffer.push(String.valueOf(c));
+    }
+
+    private void LOGIC_OPERATION(String op) {
+        boolean flag = false;
+        b = getVarFromTable(buffer.pop());
+        a = getVarFromTable(buffer.pop());
+
+        switch (op) {
+            case "<":
+                flag = a < b;
+                break;
+            case ">":
+                flag = a > b;
+                break;
+            case "==":
+                flag = a == b;
+                break;
+            case "!=":
+                flag = a != b;
+                break;
+            case "<=":
+                flag = a <= b;
+                break;
+            case ">=":
+                flag = a >= b;
+                break;
+        }
+
+        System.out.println("LOGIC: " + flag);
+        buffer.push(String.valueOf(flag));
     }
 
     private int getVarFromTable (String value) {
