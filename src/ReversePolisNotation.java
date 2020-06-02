@@ -10,8 +10,6 @@ public class ReversePolisNotation {
 
 
     Token IfForValue = null;
-    boolean isWhile = false;
-    boolean isIF    = false;
     private Stack<Token>  ifWhileStack = new Stack<>();
     int isWhileCounter = 0;
     int isIfCounter = 0;
@@ -69,23 +67,22 @@ public class ReversePolisNotation {
             }
 
             if (token.getType().equals(LexemType.KEY_WHILE) || token.getType().equals(LexemType.KEY_IF)) {
-                Token m1 = new Token("P" + markCunter);
-                marksPosiions.put("P" + markCunter, markPositioinCounter);
-                markCunter++;
-                IfForValue = m1;
-
-                ifWhileStack.push(m1);
-                System.out.println("added to table");
+                Token tk;
 
                 if (token.getType().equals(LexemType.KEY_WHILE)){
-                    isWhile = true;
+                    tk = new Token(LexemType.KEY_WHILE, "P" + markCunter);
                     isWhileCounter++;
-                }
-
-                if (token.getType().equals(LexemType.KEY_IF)) {
-                    isIF = true;
+                } else {
+                    tk = new Token(LexemType.KEY_IF, "P" + markCunter);
                     isIfCounter++;
                 }
+
+
+                marksPosiions.put("P" + markCunter, markPositioinCounter);
+                markCunter++;
+                IfForValue = tk;
+
+                ifWhileStack.push(tk);
 
                 continue;
             }
@@ -104,46 +101,44 @@ public class ReversePolisNotation {
 
             if (token.getType().equals(LexemType.FIGURE_CLOSE_BRACKET)) {
                 if (isWhileCounter > 0) {
-                    Token m1 = new Token("P" + markCunter);
-                    Token m2 = new Token("!");
+                    if (ifWhileStack.peek().getType().equals(LexemType.KEY_WHILE)) {
+                        Token m1 = new Token(LexemType.KEY_WHILE, "P" + markCunter); //метка РХ с типом KEY_WHILE
+                        Token m2 = new Token(LexemType.KEY_WHILE,"!"); //метка ! с типом KEY_WHILE
 
-                    while (stack.size() > 0)
-                        addToken(stack.pop());
+                        while (stack.size() > 0)
+                            addToken(stack.pop());
 
-                    addToken(m1);
-                    addToken(m2);
+                        addToken(m1);
+                        addToken(m2);
 
-                    System.out.println("removed from table: 2");
+                        System.out.println("Выгружаем в таблицу: " + "P" + markCunter + ", " + ifWhileStack.peek().getValue());
 
-                    // обязательно идет после addtoken (счетчик сдвигатся)
-//                    marksPosiions.put("P" + markCunter, marksPosiions.get("P" + (markCunter-1)));
-//                    marksPosiions.put("P" + (markCunter - 1), markPositioinCounter);
-                    marksPosiions.put("P" + markCunter, marksPosiions.get(ifWhileStack.peek().getValue()));
-                    marksPosiions.put(ifWhileStack.pop().getValue(), markPositioinCounter);
+                        // обязательно идет после addtoken (счетчик сдвигатся)
+                        marksPosiions.put("P" + markCunter, marksPosiions.get(ifWhileStack.peek().getValue()));
+                        marksPosiions.put(ifWhileStack.peek().getValue(), markPositioinCounter);
 
 
-                    markCunter++; // сдвиг счетчика меток
-                    isWhile = false;
-                    isWhileCounter--;
+                        markCunter++; // сдвиг счетчика меток
+                        isWhileCounter--;
+                    }
                 }
 
                 if (isIfCounter > 0) {
+                    if (ifWhileStack.peek().getType().equals(LexemType.KEY_IF)) {
+                        while (stack.size() > 0)
+                            addToken(stack.pop());
 
-                    while (stack.size() > 0)
-                        addToken(stack.pop());
-
-                    // обязательно идет после addtoken (счетчик сдвигатся)
-//                    marksPosiions.put("P" + (markCunter - 1), markPositioinCounter);
-                    System.out.println("removed from table");
-                    marksPosiions.put(ifWhileStack.pop().getValue(), markPositioinCounter);
+                        System.out.println("Выгружаем в таблицу: " + ifWhileStack.peek().getValue());
+                        // обязательно идет после addtoken (счетчик сдвигатся)
+                        marksPosiions.put(ifWhileStack.peek().getValue(), markPositioinCounter);
 
 
-                    markCunter++; // сдвиг счетчика меток
-                    isIF = false;
-                    isIfCounter--;
+                        markCunter++; // сдвиг счетчика меток
+                        isIfCounter--;
+                    }
                 }
 
-
+                ifWhileStack.pop(); // либо так, либо объединить через if-else KEY_IF и KEY_WHILE проверки выше
                 continue;
             }
 
