@@ -1,5 +1,6 @@
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -8,12 +9,17 @@ public class Parser {
     private final List<Token> tokens;
     private int counter = 0;
     private VariablesTable vTable;
+    HashMap<String, Integer> varTable = new HashMap<String, Integer>();
 
     boolean openRoundBracketFound = false;
 
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         vTable = new VariablesTable();
+    }
+
+    public HashMap<String, Integer> getVarTable () {
+        return varTable;
     }
 
     public boolean lang() throws LangParseEsception {
@@ -169,6 +175,7 @@ public class Parser {
 
             //System.out.println("trying to create: " + tokens.get(step).getValue() +  " " + tokens.get(step+1).getValue());
             boolean create = vTable.addVariable(new VariablesTable.tVariable(tokens.get(step).getValue(), tokens.get(step+1).getValue()));
+            varTable.put(tokens.get(step+1).getValue(), 0); // новый вариант (упрощенный)
 
             if (!create) {
                 System.out.println("VARIABLE ALREADY EXISTS!");

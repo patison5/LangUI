@@ -1,3 +1,4 @@
+int k = 12 + 2;
 if (k < 0)
 {
     while (k < 0) {

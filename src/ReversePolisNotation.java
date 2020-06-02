@@ -33,6 +33,9 @@ public class ReversePolisNotation {
     public List<Token> getTokens() {
         return tokens;
     }
+    public Map<String, Integer> getmMrksPosiions() {
+        return marksPosiions;
+    }
 
     public int GetPriority (Token token) {
         switch (token.getValue()) {
@@ -57,7 +60,6 @@ public class ReversePolisNotation {
     }
 
     public List<Token> translate () {
-
         for (Token token : tokens) {
 
             if (token.getType().equals(LexemType.SEMICOLON)) {
@@ -111,7 +113,7 @@ public class ReversePolisNotation {
                         addToken(m1);
                         addToken(m2);
 
-                        System.out.println("Выгружаем в таблицу: " + "P" + markCunter + ", " + ifWhileStack.peek().getValue());
+//                        System.out.println("Выгружаем в таблицу: " + "P" + markCunter + ", " + ifWhileStack.peek().getValue());
 
                         // обязательно идет после addtoken (счетчик сдвигатся)
                         marksPosiions.put("P" + markCunter, marksPosiions.get(ifWhileStack.peek().getValue()));
@@ -128,7 +130,7 @@ public class ReversePolisNotation {
                         while (stack.size() > 0)
                             addToken(stack.pop());
 
-                        System.out.println("Выгружаем в таблицу: " + ifWhileStack.peek().getValue());
+//                        System.out.println("Выгружаем в таблицу: " + ifWhileStack.peek().getValue());
                         // обязательно идет после addtoken (счетчик сдвигатся)
                         marksPosiions.put(ifWhileStack.peek().getValue(), markPositioinCounter);
 
@@ -173,7 +175,7 @@ public class ReversePolisNotation {
             for (Token token : stack)
                 addToken(token);
 
-        debugMark();
+//        debugMark();
 
         for (Token token : result) {
             System.out.print(token.getValue()+ " ");

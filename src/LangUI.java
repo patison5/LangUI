@@ -52,6 +52,8 @@ public class LangUI {
                 ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
                 List<Token> tk = rpNotation.translate();
                 StackMachine machine = new StackMachine(tk);
+                machine.setVarTable(parser.getVarTable());
+                machine.setMarksPosiions(rpNotation.getmMrksPosiions());
                 machine.run();
                 //System.out.println("\na 1 = a 3 < p1 !F a a 1 + = b a = p2 ! c b 2 + =");
             }
