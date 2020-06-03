@@ -13,6 +13,7 @@ public class ReversePolisNotation {
     private Stack<Token>  ifWhileStack = new Stack<>();
     int isWhileCounter = 0;
     int isIfCounter = 0;
+    boolean printFlag = false;
 
     int markCunter = 1;
     int markPositioinCounter = 0;
@@ -66,9 +67,20 @@ public class ReversePolisNotation {
                 continue;
             }
 
+            if (token.getType().equals(LexemType.KEY_PRINTF)) {
+                printFlag = true;
+                continue;
+            }
+
             if (token.getType().equals(LexemType.SEMICOLON)) {
                 while (stack.size() > 0)
                     addToken(stack.pop());
+
+                if (printFlag){
+                    addToken(new Token(LexemType.KEY_PRINTF, "printf"));
+                    printFlag = false;
+                }
+
                 continue;
             }
 
@@ -179,7 +191,7 @@ public class ReversePolisNotation {
             for (Token token : stack)
                 addToken(token);
 
-//        debugMark();
+        debugMark();
 
         for (Token token : result) {
             System.out.print(token.getValue()+ " ");

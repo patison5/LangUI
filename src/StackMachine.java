@@ -38,7 +38,6 @@ public class StackMachine {
             token = tokens.get(counter);
 
             if (token.getType() == LexemType.VAR) {
-                System.out.println("VAR: " + token.getType() + ", " + token.getValue() + ", " + counter);
                 buffer.push(token.getValue());
             } else if (token.getType() == LexemType.DIGIT) {
                 buffer.push(token.getValue());
@@ -56,6 +55,8 @@ public class StackMachine {
                 int pointValue = marksPosiions.get(tokens.get(counter-1).getValue());
                 counter = pointValue;
                 counter--; //костыль (почему-то прыгает на один элемент вперед - выяснить!
+            } else if (token.getType() == LexemType.KEY_PRINTF) {
+                System.out.println("F++ >  " + getVarFromTable(buffer.pop()));
             }
             counter++;
         }
@@ -88,7 +89,7 @@ public class StackMachine {
                 c = a * b;
                 break;
         }
-        System.out.println("OPERATION: " + String.valueOf(c));
+//        System.out.println("OPERATION: " + String.valueOf(c));
         buffer.push(String.valueOf(c));
     }
 
@@ -118,7 +119,7 @@ public class StackMachine {
                 break;
         }
 
-        System.out.println("LOGIC: " + flag);
+//        System.out.println("LOGIC: " + flag);
         buffer.push(String.valueOf(flag));
     }
 
