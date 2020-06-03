@@ -50,7 +50,7 @@ public class StackMachine {
             } else if (token.getValue() == "!F") {
                 int pointValue = marksPosiions.get(tokens.get(counter-1).getValue());
                 boolean fl = buffer.pop().equals("true");
-                counter = fl ? counter : pointValue;
+                counter = fl ? counter : pointValue - 1;
             } else if (token.getValue() == "!") {
                 int pointValue = marksPosiions.get(tokens.get(counter-1).getValue());
                 counter = pointValue;
