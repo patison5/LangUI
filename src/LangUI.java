@@ -32,15 +32,15 @@ public class LangUI {
             Lexer lexer = new Lexer(file);
             List<Token> tokens = lexer.getTokens();
 
-            System.out.println("\nAmount of tokens: " + tokens.size());
+//            System.out.println("\nAmount of tokens: " + tokens.size());
 
             for (int i = 0; i < tokens.size(); i++) {
                 Token token = tokens.get(i);
                 String a = token.getValue();
-                System.out.print("`" +  a + "` ");
+//                System.out.print("`" +  a + "` ");
                 //System.out.print(" " + token.getValue());
             }
-            System.out.println("");
+//            System.out.println("");
 
             Parser parser = new Parser( lexer.getTokens() );
             if (parser.lang()) {

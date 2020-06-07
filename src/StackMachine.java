@@ -28,11 +28,11 @@ public class StackMachine {
 
 
     public int run () {
-        System.out.println("\nStarting stack machine...");
+        System.out.println("\n\n####### СТЕК-МАШИНА #######\n");
         Token token;
 
-        debugTable();
-        debugMark();
+//        debugTable();
+//        debugMark();
 
         while (counter < tokens.size()) {
             token = tokens.get(counter);

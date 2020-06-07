@@ -191,7 +191,7 @@ public class ReversePolisNotation {
             for (Token token : stack)
                 addToken(token);
 
-        debugMark();
+//        debugMark();
 
         for (Token token : result) {
             System.out.print(token.getValue()+ " ");
@@ -210,7 +210,7 @@ public class ReversePolisNotation {
 
     public void addToken (Token token) {
         result.add(token);
-        System.out.println(token.getValue() + " : " + markPositioinCounter);
+//        System.out.println(token.getValue() + " : " + markPositioinCounter);
         markPositioinCounter++;
     }
 

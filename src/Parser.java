@@ -36,7 +36,7 @@ public class Parser {
             System.out.println(e);
             System.out.println(tokens.size());
             System.out.println(counter);
-            return true;
+            return false;
         }
     }
 

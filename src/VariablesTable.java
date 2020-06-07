@@ -56,8 +56,8 @@ public class VariablesTable {
         for (int i = 0; i < this._listOfVariables.size(); i++) {
             tVariable v = this._listOfVariables.get(i);
 
-            System.out.println("v.title: " + v.title);
-            System.out.println("variable.title: " + variable.title);
+//            System.out.println("v.title: " + v.title);
+//            System.out.println("variable.title: " + variable.title);
 
             if (v.title.equals(variable.title)) {
 
