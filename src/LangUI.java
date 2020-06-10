@@ -55,17 +55,6 @@ public class LangUI {
                 machine.setVarTable(parser.getVarTable());
                 machine.setMarksPosiions(rpNotation.getmMrksPosiions());
                 machine.run();
-
-                LinkedList list = new LinkedList();
-                list.add(15);
-                list.add(16);
-                list.add(17);
-                list.add(18);
-
-                System.out.println("0 : " + list.getByIndex(0));
-                System.out.println("1 : " + list.getByIndex(1));
-                System.out.println("2 : " + list.getByIndex(2));
-                System.out.println("4 : " + list.getByIndex(4));
             }
 
         }

@@ -12,6 +12,7 @@ public class StackMachine {
 
 
     HashMap<String, Integer> varTable;
+    HashMap<String, LinkedList> listTable = new HashMap<String, LinkedList>();
     Map<String, Integer> marksPosiions = new HashMap<String, Integer>();
 
     public StackMachine(List<Token> tokens) {
@@ -57,6 +58,25 @@ public class StackMachine {
                 counter--; //костыль (почему-то прыгает на один элемент вперед - выяснить!
             } else if (token.getType() == LexemType.KEY_PRINTF) {
                 System.out.println("F++ >  " + getVarFromTable(buffer.pop()));
+            } else if (token.getType() == LexemType.KEY_LIST) {
+                LinkedList list = new LinkedList();
+                counter++;
+                listTable.put(tokens.get(counter).getValue(), list);
+            } else if (token.getType() == LexemType.KEY_LIST_ADD) {
+                String variable = buffer.pop();             // название списка
+                LinkedList list = listTable.get(variable);  // этот список из таблиц
+                counter++;
+                int value = getVarFromTable(tokens.get(counter).getValue());    // значение переменной для записи в список
+                list.add(value);    // помещаю в список
+                listTable.put(variable, list); //возвращаю список обратно в таблицу
+            } else if (token.getType() == LexemType.KEY_LIST_GET) {
+                counter++;
+                int id = getVarFromTable(tokens.get(counter).getValue());
+
+                String variable = buffer.pop();
+                LinkedList list = listTable.get(variable);  // этот список из таблиц
+                int value = list.getByIndex(id);
+                buffer.push(String.valueOf(value));
             }
             counter++;
         }

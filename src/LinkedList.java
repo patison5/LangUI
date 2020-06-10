@@ -22,8 +22,6 @@ public class LinkedList {
 
             nItem.setNext(item);
             item.setIndex(nItem.getIndex() + 1);
-
-            System.out.println(item.value + ": " + item.getIndex());
         }
     }
 

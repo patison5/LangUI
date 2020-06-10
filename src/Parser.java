@@ -48,13 +48,46 @@ public class Parser {
         KEY_DATA_TYPE();
         VAR();
         ASSIGN_OP();
-        variableValue();
-        SEMICOLON();
+
+        int step = counter;
+        try {
+            variableValue();
+            SEMICOLON();
+        } catch (LangParseEsception e) {
+            counter = step;
+            listGet();
+        }
     }
     private  void variableAssigment() throws LangParseEsception {
         VAR();
         ASSIGN_OP();
-        variableValue();
+        int step = counter;
+        try {
+            variableValue();
+            SEMICOLON();
+        } catch (LangParseEsception e) {
+            counter = step;
+            listGet();
+        }
+    }
+
+    private void listCreation () throws  LangParseEsception {
+        KEY_LIST();
+        VAR();
+        SEMICOLON();
+    }
+
+    private  void listAdd () throws  LangParseEsception {
+        VAR();
+        KEY_LIST_ADD();
+        value();
+        SEMICOLON();
+    }
+
+    private  void listGet () throws  LangParseEsception {
+        VAR();
+        KEY_LIST_GET();
+        value();
         SEMICOLON();
     }
 
@@ -209,7 +242,19 @@ public class Parser {
                         } catch (LangParseEsception e5) {
                             counter = step;
 
-                            whileExpression();
+                            try {
+                                whileExpression();
+                            } catch (LangParseEsception e6) {
+                                counter = step;
+
+                                try {
+                                    listCreation();
+                                } catch (LangParseEsception e7) {
+                                    counter = step;
+
+                                    listAdd();
+                                }
+                            }
                         }
                     }
                 }
@@ -471,6 +516,15 @@ public class Parser {
     private void DOUBLE_QUOTES() throws LangParseEsception {
         matchToken(match(), LexemType.DOUBLE_QUOTES);
     }
+    private  void KEY_LIST () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_LIST);
+    }
+    private  void KEY_LIST_ADD () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_LIST_ADD);
+    }
 
+    private  void KEY_LIST_GET () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_LIST_GET);
+    }
 
 }

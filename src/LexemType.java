@@ -6,6 +6,8 @@ public enum LexemType {
     KEY_WHILE("^while$"),
     KEY_FOR("^for$"),
     KEY_LIST("^list$"),
+    KEY_LIST_ADD("^add$"),
+    KEY_LIST_GET("^get$"),
     KEY_DATA_TYPE("^(int|string|bool|void)$"),
     KEY_PRINTF("^printf$"),
     VAR("^[a-zA-Z]+$"),
