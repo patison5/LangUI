@@ -55,7 +55,7 @@ public class HashSet {
         ListItem nItem = LListArray[index]; // используется для итерации и поиска последнего
 
         while (true) {
-            if (nItem.key == key)
+            if (nItem.key.compareTo(key) == 0)
                 return nItem.value;
 
             if (nItem.getNext() == null)

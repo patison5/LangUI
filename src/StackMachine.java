@@ -96,12 +96,10 @@ public class StackMachine {
                 System.out.println("1value :-> " + value);
 
                 HashSet set = MapTable.get(variable);       // этот список из таблиц
-                        set.add(key, 22);                   // помещаю в список
+                        set.add(key, value);                   // помещаю в список
                 MapTable.put(variable, set); //возвращаю список обратно в таблицу
 
 
-                HashSet testHesh = MapTable.get(variable);
-                System.out.println("DEB!::::" + testHesh.getByKey(key));
 
             } else if (token.getType() == LexemType.KEY_HASH_GET) {
                 counter++;
