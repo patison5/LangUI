@@ -13,6 +13,7 @@ public class StackMachine {
 
     HashMap<String, Integer> varTable;
     HashMap<String, LinkedList> listTable = new HashMap<String, LinkedList>();
+    HashMap<String, HashSet> MapTable = new HashMap<String, HashSet>();
     Map<String, Integer> marksPosiions = new HashMap<String, Integer>();
 
     public StackMachine(List<Token> tokens) {
@@ -62,6 +63,7 @@ public class StackMachine {
                 LinkedList list = new LinkedList();
                 counter++;
                 listTable.put(tokens.get(counter).getValue(), list);
+
             } else if (token.getType() == LexemType.KEY_LIST_ADD) {
                 String variable = buffer.pop();             // название списка
                 LinkedList list = listTable.get(variable);  // этот список из таблиц
@@ -77,11 +79,48 @@ public class StackMachine {
                 LinkedList list = listTable.get(variable);  // этот список из таблиц
                 int value = list.getByIndex(id);
                 buffer.push(String.valueOf(value));
+
+            } else if (token.getType() == LexemType.KEY_HASHMAP) {
+                HashSet set = new HashSet();
+                counter++;
+                MapTable.put(tokens.get(counter).getValue(), set);
+            } else if (token.getType() == LexemType.KEY_HASH_ADD) {
+                String variable = buffer.pop();             // название переменной
+                counter++;
+                String key = tokens.get(counter).getValue();
+                counter++;
+                int value = getVarFromTable(tokens.get(counter).getValue());    // значение переменной для записи в список
+
+                System.out.println("1KEY   :-> " +  key);
+                System.out.println("1name  :-> " + variable);
+                System.out.println("1value :-> " + value);
+
+                HashSet set = MapTable.get(variable);       // этот список из таблиц
+                        set.add(key, 22);                   // помещаю в список
+                MapTable.put(variable, set); //возвращаю список обратно в таблицу
+
+
+                HashSet testHesh = MapTable.get(variable);
+                System.out.println("DEB!::::" + testHesh.getByKey(key));
+
+            } else if (token.getType() == LexemType.KEY_HASH_GET) {
+                counter++;
+                String key = tokens.get(counter).getValue();
+                String variable = buffer.pop();
+                HashSet set = MapTable.get(variable);  // этот список из таблиц
+                int value = set.getByKey(key);
+
+                System.out.println("2KEY   :-> " + key);
+                System.out.println("2name  :-> " + variable);
+                System.out.println("2value :-> " + value);
+
+                buffer.push(String.valueOf(value));
             }
             counter++;
         }
 
         debugTable();
+        debugHashTable();
         return 0;
     }
 
@@ -165,6 +204,18 @@ public class StackMachine {
         System.out.println("");
         System.out.printf("%-15s%-10s%n", "переменная", "значение");
         for (Map.Entry entry : varTable.entrySet()) {
+            // Выводим имя поля
+            System.out.printf("%-15s", entry.getKey());
+            // Выводим значение поля
+            System.out.printf("%5s%n", entry.getValue());
+        }
+        System.out.println();
+    }
+
+    private void debugHashTable() {
+        System.out.println("");
+        System.out.printf("%-15s%-10s%n", "переменная", "значение");
+        for (Map.Entry entry : MapTable.entrySet()) {
             // Выводим имя поля
             System.out.printf("%-15s", entry.getKey());
             // Выводим значение поля

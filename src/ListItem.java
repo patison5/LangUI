@@ -2,6 +2,8 @@ import java.awt.event.ItemListener;
 
 public class ListItem {
     public int value;
+    public String key;
+    public int hash;
     public int index = 0;
     public ListItem nextItemLink = null;
 

@@ -1,15 +1,4 @@
-int i = 0;
-list aList;
-while (i < 10) {
-    aList add i;
-    i = i + 1;
-}
-int b = aList get 0;
-int c = aList get 1;
-int k = 0;
-int tmp = 0;
-while (k < 10) {
-    tmp = aList get k;
-    printf(tmp);
-    k = k + 1;
-}
+HashMap map;
+map HashAdd keyA 12;
+map HashAdd keyB 13;
+int tmp = map HashGet keyA;

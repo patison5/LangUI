@@ -55,7 +55,13 @@ public class Parser {
             SEMICOLON();
         } catch (LangParseEsception e) {
             counter = step;
-            listGet();
+
+            try {
+                listGet();
+            } catch (LangParseEsception e1) {
+                counter = step;
+                MapGet();
+            }
         }
     }
     private  void variableAssigment() throws LangParseEsception {
@@ -67,8 +73,36 @@ public class Parser {
             SEMICOLON();
         } catch (LangParseEsception e) {
             counter = step;
-            listGet();
+
+            try {
+                listGet();
+            } catch (LangParseEsception e1) {
+                counter = step;
+                MapGet();
+            }
         }
+    }
+
+
+    private void MapCreation () throws  LangParseEsception {
+        KEY_HASHMAP();
+        VAR();
+        SEMICOLON();
+    }
+
+    private  void MapAdd () throws  LangParseEsception {
+        VAR();
+        KEY_HASH_ADD();
+        VAR();
+        value();
+        SEMICOLON();
+    }
+
+    private  void MapGet () throws  LangParseEsception {
+        VAR();
+        KEY_HASH_GET();
+        value();
+        SEMICOLON();
     }
 
     private void listCreation () throws  LangParseEsception {
@@ -151,9 +185,10 @@ public class Parser {
         value();
         SEMICOLON();
 
-        //вот тут поправить... все же хочу i = i + 1;
         VAR();
         ASSIGN_OP();
+        VAR();
+        OP();
         value();
         ROUND_CLOSE_BRACKET();
 
@@ -252,7 +287,18 @@ public class Parser {
                                 } catch (LangParseEsception e7) {
                                     counter = step;
 
-                                    listAdd();
+                                    try {
+                                        listAdd();
+                                    } catch (LangParseEsception e8) {
+                                        counter = step;
+
+                                        try {
+                                            MapAdd();
+                                        } catch (LangParseEsception e9) {
+                                            counter = step;
+                                            MapCreation();
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -523,8 +569,20 @@ public class Parser {
         matchToken(match(), LexemType.KEY_LIST_ADD);
     }
 
+    private  void KEY_HASH_ADD () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_HASH_ADD);
+    }
+
+    private  void KEY_HASH_GET () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_HASH_GET);
+    }
+
     private  void KEY_LIST_GET () throws  LangParseEsception {
         matchToken(match(), LexemType.KEY_LIST_GET);
+    }
+
+    private  void KEY_HASHMAP () throws  LangParseEsception {
+        matchToken(match(), LexemType.KEY_HASHMAP);
     }
 
 }

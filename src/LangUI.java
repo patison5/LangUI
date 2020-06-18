@@ -5,6 +5,18 @@ import java.util.List;
 
 public class LangUI {
     public static void main(String[] args) {
+
+        if (false) {
+            HashSet hashSet = new HashSet();
+            hashSet.add("vishal", 20);
+            hashSet.add("vishal", 25);
+            hashSet.add("vihal", 20);
+
+            System.out.println("['vishal']: " + hashSet.getByKey("vishal"));
+            System.out.println("['vihal']: " + hashSet.getByKey("vihal"));
+            return;
+        }
+
         System.out.println();
         String file = "";
         try {
@@ -51,6 +63,10 @@ public class LangUI {
 
                 ReversePolisNotation rpNotation = new ReversePolisNotation(lexer.getTokens());
                 List<Token> tk = rpNotation.translate();
+                for (int i = 0; i < tk.size(); i++) {
+                    System.out.println(tk.get(i).getValue() + " ");
+                }
+
                 StackMachine machine = new StackMachine(tk);
                 machine.setVarTable(parser.getVarTable());
                 machine.setMarksPosiions(rpNotation.getmMrksPosiions());
