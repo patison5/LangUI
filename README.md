@@ -15,7 +15,7 @@
 |  Интерпретатор | Выполняет написанный код программы
 
 #
-### Пример тестируемой программы
+### Пример того, что я хочу получить
 ```sh
 int k = 12;
 
@@ -40,6 +40,41 @@ printf( fib(3) ); // 2
 printf( fib(7) ); // 13
 ```
 
+### Пример того, что я имею сейчас
+```sh
+HashMap map;
+map HashAdd keyA 12;
+map HashAdd keyB 13;
+int tmp = map HashGet keyA;
+
+int i = 0;
+list aList;
+while (i < 10) {
+    aList add i;
+    i = i + 1;
+}
+int b = aList get 0;
+int c = aList get 1;
+int k = 0;
+int tmp = 0;
+while (k < 10) {
+    tmp = aList get k;
+    printf(tmp);
+    k = k + 1;
+}
+
+int c = 0;
+while (i < 22) {
+    printf(i);
+     i = i + 2;
+    if (i < 1) {
+       printf(i);
+    if (c > 1) {
+       printf(c);
+    }
+    i = i + 1;
+}
+```
 
 ### Типы данных
 | Тип | значение | 
